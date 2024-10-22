@@ -18,6 +18,5 @@ You will now be able to perform operations such as "Copy, Paste, Save, Back, For
 ***Next update includes:***
 
 - Settings
-- Start Page
 - Change the default search engine.(Google, DuckDuckGo and oth.)
 - Reload button(top the page)
