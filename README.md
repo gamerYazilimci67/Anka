@@ -1,3 +1,4 @@
+![Anka](public/img/logo.png)
 # Anka
 
 Anka Browser v1.5.0
