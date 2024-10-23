@@ -3,8 +3,14 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import * 
 from PyQt5.QtGui import *
+import configparser
 
-tab_name = "Google"
+tab_name = "New Tab"
+
+config = configparser.ConfigParser()
+config.read('config/config.conf')
+
+start_url = config['Settings']['search_engine']
 
 class AnkaBrowser(QMainWindow):
     def __init__(self):
@@ -16,7 +22,7 @@ class AnkaBrowser(QMainWindow):
         self.tabs.tabCloseRequested.connect(self.close_tab)
         self.setWindowIcon(QIcon("public/img/logo.ico"))
 
-        self.add_new_tab(QUrl("https://www.google.com"), tab_name)
+        self.add_new_tab(QUrl(start_url), tab_name)
 
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.load_url)
@@ -48,13 +54,31 @@ class AnkaBrowser(QMainWindow):
         self.new_tab_button.setIconSize(QSize(25, 25))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
         self.new_tab_button.setCursor(QCursor(Qt.PointingHandCursor))
+        
+        self.reload_button = QPushButton()
+        self.reload_button.clicked.connect(self.browser_reload)
+        self.reload_button.setIcon(QIcon("public/img/reload.svg"))
+        self.reload_button.setFixedSize(QSize(25,25))
+        self.reload_button.setIconSize(QSize(25,25))
+        self.reload_button.setStyleSheet("background-color: transparent; border: none;")
+        self.reload_button.setCursor(QCursor(Qt.PointingHandCursor))
          
+
+        self.settings_button = QPushButton()
+        self.settings_button.clicked.connect(self.open_settings)
+        self.settings_button.setIcon(QIcon("public/img/settingsbar.svg"))
+        self.settings_button.setFixedSize(QSize(25,25))
+        self.settings_button.setIconSize(QSize(25,25))
+        self.settings_button.setStyleSheet("background-color: transparent; border: none;")
+        self.settings_button.setCursor(QCursor(Qt.PointingHandCursor))
         
         top_layout = QHBoxLayout()
         top_layout.addWidget(self.back_button)
         top_layout.addWidget(self.forward_button)
         top_layout.addWidget(self.new_tab_button)
+        top_layout.addWidget(self.reload_button)
         top_layout.addWidget(self.url_bar)
+        top_layout.addWidget(self.settings_button)
 
         main_layout = QVBoxLayout()
         main_layout.addLayout(top_layout)  
@@ -74,7 +98,7 @@ class AnkaBrowser(QMainWindow):
         
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()
-        new_browser.setUrl(url)
+        new_browser.setUrl(QUrl(start_url))
         self.tabs.addTab(new_browser, label)
         self.tabs.setCurrentWidget(new_browser)
 
@@ -97,7 +121,7 @@ class AnkaBrowser(QMainWindow):
         self.tabs.setTabText(index, title if title else tab_name)
 
     def add_new_tab_button(self):
-        self.add_new_tab(QUrl("https://www.google.com"), tab_name)
+        self.add_new_tab(start_url, tab_name)
 
     def update_url(self, url):
         if isinstance(url, QUrl):
@@ -161,10 +185,60 @@ class AnkaBrowser(QMainWindow):
         current_browser.page().toHtml(self.save_html)
 
     def save_html(self, html):
-        file_name, _ = QFileDialog.getSaveFileName(self, "Kaydet", "", "HTML Dosyası (*.html);;Tüm Dosyalar (*)")
+        file_name, _ = QFileDialog.getSaveFileName(self, "Kaydet", "", "HTML Dosyası (*.html);;WEBP Dosyası(*.webp);;Tüm Dosyalar (*)")
         if file_name:
             with open(file_name, 'w', encoding='utf-8') as file:
                 file.write(html)
+    def open_settings(self):
+        settings = AnkaBrowserSettings(self)
+        settings.exec_()
+class AnkaBrowserSettings(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Anka | Settings")
+        self.setFixedSize(QSize(500,159))
+        
+
+        layout = QVBoxLayout()
+ 
+        self.search_engine_label = QLabel("Search Engine: ")
+        layout.addWidget(self.search_engine_label)
+    
+        self.search_engine = QComboBox()
+        self.search_engine.setFixedSize(QSize(450,25))
+        self.search_engine.addItem("Google")
+        self.search_engine.addItem("DuckDuckGo")
+
+        if start_url == "https://duckduckgo.com":
+            self.search_engine.setCurrentIndex(1)
+
+        layout.addWidget(self.search_engine)
+
+        self.note_label = QLabel("Please restart browser for configurate the settings.")
+        self.note_label.setStyleSheet("padding-top: 5px;")
+        layout.addWidget(self.note_label)
+         
+        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttons.accepted.connect(self.ok)
+        self.buttons.rejected.connect(self.cancel)
+        layout.addWidget(self.buttons)
+        
+        self.setLayout(layout)
+    def ok(self):
+        s_engine = self.search_engine.currentText()
+        if s_engine == "DuckDuckGo":
+            config["Settings"]["search_engine"] = "https://duckduckgo.com"
+        elif s_engine == "Google":
+            config["Settings"]["search_engine"] = "https://google.com"
+        with open('config/config.conf', 'w' ) as configfile:
+            config.write(configfile)
+        self.accept()
+        
+    def cancel(self):
+        self.reject()
+    start_url = config["Settings"]["search_engine"]
+        
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)      
