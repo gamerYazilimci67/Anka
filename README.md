@@ -20,5 +20,5 @@ Anka is a browser developed with PyQt5 and QWebEngine in Python and open-source 
 
 - More settings and more configurations
 - More search engine(Startpage, Brave and oth.)
-- Dark Theme
-- Themes and more appearances 
+- History 
+- Downloads
