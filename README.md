@@ -26,7 +26,7 @@ Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source 
 
 ## Imported libraries in project:
 
-- PyQt5
+- PyQt6
 - sys
 - configparser
 
