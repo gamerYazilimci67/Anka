@@ -37,7 +37,7 @@ class AnkaBrowser(QMainWindow):
         self.back_button.setFixedSize(QSize(25, 25))
         self.back_button.setIconSize(QSize(25, 25))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
-        self.back_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.back_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         self.forward_button = QPushButton()
         self.forward_button.clicked.connect(self.browser_forward)
@@ -45,7 +45,7 @@ class AnkaBrowser(QMainWindow):
         self.forward_button.setFixedSize(QSize(25, 25))
         self.forward_button.setIconSize(QSize(25, 25))
         self.forward_button.setStyleSheet("background-color: transparent; border: none;")
-        self.forward_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.forward_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.new_tab_button = QPushButton()
         self.new_tab_button.clicked.connect(self.add_new_tab_button)
@@ -53,7 +53,7 @@ class AnkaBrowser(QMainWindow):
         self.new_tab_button.setFixedSize(QSize(25, 25))
         self.new_tab_button.setIconSize(QSize(25, 25))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
-        self.new_tab_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.new_tab_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         self.reload_button = QPushButton()
         self.reload_button.clicked.connect(self.browser_reload)
@@ -61,7 +61,7 @@ class AnkaBrowser(QMainWindow):
         self.reload_button.setFixedSize(QSize(25,25))
         self.reload_button.setIconSize(QSize(25,25))
         self.reload_button.setStyleSheet("background-color: transparent; border: none;")
-        self.reload_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.reload_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
          
 
         self.settings_button = QPushButton()
@@ -70,7 +70,7 @@ class AnkaBrowser(QMainWindow):
         self.settings_button.setFixedSize(QSize(25,25))
         self.settings_button.setIconSize(QSize(25,25))
         self.settings_button.setStyleSheet("background-color: transparent; border: none;")
-        self.settings_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.settings_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         top_layout = QHBoxLayout()
         top_layout.addWidget(self.back_button)
@@ -104,11 +104,11 @@ class AnkaBrowser(QMainWindow):
 
         self.close_tab_button = QPushButton()
         self.close_tab_button.clicked.connect(lambda: self.close_tab(self.tabs.indexOf(new_browser)))
-        self.close_tab_button.setCursor(QCursor(Qt.PointingHandCursor))
+        self.close_tab_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         new_browser.titleChanged.connect(lambda title: self.update_title(new_browser, title))
         new_browser.urlChanged.connect(lambda q: self.update_url(q))
-        new_browser.setContextMenuPolicy(Qt.CustomContextMenu)
+        new_browser.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         new_browser.customContextMenuRequested.connect(self.show_context_menu)
     def close_tab(self, index):
         if self.tabs.count() == 1:
