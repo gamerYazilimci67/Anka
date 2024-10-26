@@ -5,7 +5,7 @@ Anka Browser v1.5.0
 
 ## What is Anka Browser?
 
-Anka is a browser developed with PyQt5 and QWebEngine in Python and open-source browser.
+Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source browser.
 
 ## Anka v1.5.0:
 
@@ -22,3 +22,13 @@ Anka is a browser developed with PyQt5 and QWebEngine in Python and open-source 
 - More search engine(Startpage, Brave and oth.)
 - History 
 - Downloads
+
+
+## Imported libraries in project:
+
+- PyQt5
+- sys
+- configparser
+
+## Warnings:
+> This project is using "GNU GENERAL PUBLIC LICENSE"!

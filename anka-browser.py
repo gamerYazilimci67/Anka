@@ -1,8 +1,8 @@
 import sys
-from PyQt5.QtWidgets import *
-from PyQt5.QtWebEngineWidgets import QWebEngineView
-from PyQt5.QtCore import * 
-from PyQt5.QtGui import *
+from PyQt6.QtWidgets import *
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt6.QtCore import * 
+from PyQt6.QtGui import *
 import configparser
 
 tab_name = "New Tab"
@@ -15,7 +15,7 @@ start_url = config['Settings']['search_engine']
 class AnkaBrowser(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        
         self.tabs = QTabWidget()
         self.setCentralWidget(self.tabs)
         self.tabs.setTabsClosable(True)
@@ -191,7 +191,7 @@ class AnkaBrowser(QMainWindow):
                 file.write(html)
     def open_settings(self):
         settings = AnkaBrowserSettings(self)
-        settings.exec_()
+        settings.exec()
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -244,4 +244,4 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)      
     anka_browser_window = AnkaBrowser()
     anka_browser_window.show()  
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
