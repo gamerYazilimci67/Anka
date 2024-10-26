@@ -192,6 +192,8 @@ class AnkaBrowser(QMainWindow):
     def open_settings(self):
         settings = AnkaBrowserSettings(self)
         settings.exec()
+
+       
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -218,7 +220,7 @@ class AnkaBrowserSettings(QDialog):
         self.note_label.setStyleSheet("padding-top: 5px;")
         layout.addWidget(self.note_label)
          
-        self.buttons = QDialogButtonBox(QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+        self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
         self.buttons.accepted.connect(self.ok)
         self.buttons.rejected.connect(self.cancel)
         layout.addWidget(self.buttons)
