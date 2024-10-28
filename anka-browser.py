@@ -164,7 +164,7 @@ class AnkaBrowser(QMainWindow):
         context_menu.addAction("Forward", self.browser_forward)
         context_menu.addAction("Reload", self.browser_reload)
 
-        context_menu.exec_(self.tabs.currentWidget().mapToGlobal(position))
+        context_menu.exec(self.tabs.currentWidget().mapToGlobal(position))
 
     def browser_copy(self):
         current_browser = self.tabs.currentWidget()
