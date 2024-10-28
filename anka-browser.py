@@ -5,18 +5,39 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 import configparser
 
+
+
 tab_name = "New Tab"
+
 
 config = configparser.ConfigParser()
 config.read('config/config.conf')
 
 start_url = config['Settings']['search_engine']
+tab_color = config['Appearance']['tab_color']
+notselected_tab_color = config["Appearance"]["not_selected_tab_color"]
 
 class AnkaBrowser(QMainWindow):
     def __init__(self):
         super().__init__()
         
+
         self.tabs = QTabWidget()
+        self.tabs.setStyleSheet(f"""            
+        QTabBar::tab{{
+             background: {notselected_tab_color};
+             min-width:125px;
+             max-width:200px;
+             height:25px;
+             border-radius: 10px;
+             padding: 5px;
+        
+        
+        }}
+        QTabBar::tab::selected{{
+            background: {tab_color};
+        }}
+""")
         self.setCentralWidget(self.tabs)
         self.tabs.setTabsClosable(True)
         self.tabs.tabCloseRequested.connect(self.close_tab)
@@ -164,7 +185,7 @@ class AnkaBrowser(QMainWindow):
         context_menu.addAction("Forward", self.browser_forward)
         context_menu.addAction("Reload", self.browser_reload)
 
-        context_menu.exec_(self.tabs.currentWidget().mapToGlobal(position))
+        context_menu.exec(self.tabs.currentWidget().mapToGlobal(position))
 
     def browser_copy(self):
         current_browser = self.tabs.currentWidget()
@@ -212,9 +233,17 @@ class AnkaBrowserSettings(QDialog):
         self.search_engine.addItem("DuckDuckGo")
 
         if start_url == "https://duckduckgo.com":
-            self.search_engine.setCurrentIndex(1)
+            self.search_engine.setCurrentIndex(1),
 
         layout.addWidget(self.search_engine)
+        
+        self.tab_color_button_label = QLabel("Select Tab Color: ")
+        layout.addWidget(self.tab_color_button_label)
+
+        self.tab_color_button = QPushButton("Tab Color")
+        self.tab_color_button.setFixedSize(QSize(450,25))
+        self.tab_color_button.clicked.connect(self.open_tab_color_dialog)
+        layout.addWidget(self.tab_color_button)
 
         self.note_label = QLabel("Please restart browser for configurate the settings.")
         self.note_label.setStyleSheet("padding-top: 5px;")
@@ -239,7 +268,33 @@ class AnkaBrowserSettings(QDialog):
     def cancel(self):
         self.reject()
     start_url = config["Settings"]["search_engine"]
+    
+    def open_tab_color_dialog(self):
+        tab_color_dialog = Tab_Color_Dialog()
+        tab_color_dialog.exec()
+
+class Tab_Color_Dialog(QColorDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Anka | Select Color")
+        self.setFixedSize(QSize(500,159))
+
+        tabColor = Tab_Color_Dialog.getColor()     
+        not_selected_tab_color = tabColor.darker(125)
+        tabColor = tabColor.name()
+        not_selected_tab_color = not_selected_tab_color.name()
+
         
+        config["Appearance"]["tab_color"] = str(tabColor)
+        config["Appearance"]["not_selected_tab_color"] = str(not_selected_tab_color)
+
+        with open('config/config.conf', 'w' ) as configfile:
+            config.write(configfile)
+     
+
+
+        
+
 
 
 if __name__ == "__main__":
