@@ -8,12 +8,12 @@ import configparser
 
 
 tab_name = "New Tab"
-
+history = "./public/browser/history.txt"
 
 config = configparser.ConfigParser()
 config.read('config/config.conf')
 
-start_url = config['Settings']['search_engine']
+search_engine = config['Settings']['search_engine']
 tab_color = config['Appearance']['tab_color']
 notselected_tab_color = config["Appearance"]["not_selected_tab_color"]
 
@@ -21,7 +21,7 @@ class AnkaBrowser(QMainWindow):
     def __init__(self):
         super().__init__()
         
-
+           
         self.tabs = QTabWidget()
         self.tabs.setStyleSheet(f"""            
         QTabBar::tab{{
@@ -40,21 +40,23 @@ class AnkaBrowser(QMainWindow):
 """)
         self.setCentralWidget(self.tabs)
         self.tabs.setTabsClosable(True)
+
         self.tabs.tabCloseRequested.connect(self.close_tab)
         self.setWindowIcon(QIcon("public/img/logo.ico"))
 
-        self.add_new_tab(QUrl(start_url), tab_name)
+        self.add_new_tab(QUrl(search_engine), tab_name)
 
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.load_url)
-        self.url_bar.setPlaceholderText("URL...")
+        self.url_bar.setPlaceholderText("Enter URL or text...")
         self.url_bar.setFont(QFont("Lexend"))
         self.url_bar.setFixedHeight(25)
         self.url_bar.setStyleSheet("white-space: nowrap;")
+       
 
         self.back_button = QPushButton()
         self.back_button.clicked.connect(self.browser_back)
-        self.back_button.setIcon(QIcon("public/img/back.svg"))
+        self.back_button.setIcon(QIcon("/public/img/back.svg"))
         self.back_button.setFixedSize(QSize(25, 25))
         self.back_button.setIconSize(QSize(25, 25))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
@@ -119,10 +121,10 @@ class AnkaBrowser(QMainWindow):
         
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()
-        new_browser.setUrl(QUrl(start_url))
+        new_browser.setUrl(QUrl(search_engine))
         self.tabs.addTab(new_browser, label)
         self.tabs.setCurrentWidget(new_browser)
-
+        
         self.close_tab_button = QPushButton()
         self.close_tab_button.clicked.connect(lambda: self.close_tab(self.tabs.indexOf(new_browser)))
         self.close_tab_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
@@ -142,13 +144,21 @@ class AnkaBrowser(QMainWindow):
         self.tabs.setTabText(index, title if title else tab_name)
 
     def add_new_tab_button(self):
-        self.add_new_tab(start_url, tab_name)
+        self.add_new_tab(search_engine, tab_name)
 
     def update_url(self, url):
         if isinstance(url, QUrl):
             self.url_bar.setText(url.toString())
         else:
             self.url_bar.clear()
+        current_browser = self.tabs.currentWidget()
+        current_browser.setUrl(QUrl(url))
+        with open(history, 'r', encoding="utf-8") as file:
+            old_history = file.read()
+            new_history = str(url) + "\n" + old_history
+        with open(history, 'w', encoding="utf-8") as file:
+            file.write(new_history)
+
 
     def update_url_from_tab(self):
         current_browser = self.tabs.currentWidget()
@@ -159,9 +169,16 @@ class AnkaBrowser(QMainWindow):
     def load_url(self):
         url = self.url_bar.text()
         if not url.startswith("http"):
-            url = "https://" + url  
-        current_browser = self.tabs.currentWidget()
-        current_browser.setUrl(QUrl(url))
+            if search_engine == "https://duckduckgo.com":
+                url = search_engine + "/?q=" + url
+            else:
+                url = search_engine + "/search?q=" + url
+        
+
+        
+
+        
+           
 
     def browser_back(self):
         current_browser = self.tabs.currentWidget()
@@ -213,13 +230,14 @@ class AnkaBrowser(QMainWindow):
     def open_settings(self):
         settings = AnkaBrowserSettings(self)
         settings.exec()
+     
 
        
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setWindowTitle("Anka | Settings")
-        self.setFixedSize(QSize(500,159))
+        self.setFixedSize(QSize(500,225))
         
 
         layout = QVBoxLayout()
@@ -231,9 +249,20 @@ class AnkaBrowserSettings(QDialog):
         self.search_engine.setFixedSize(QSize(450,25))
         self.search_engine.addItem("Google")
         self.search_engine.addItem("DuckDuckGo")
+        self.search_engine.addItem("Bing")
+        self.search_engine.addItem("Brave")
+        self.search_engine.addItem("Startpage")
 
-        if start_url == "https://duckduckgo.com":
-            self.search_engine.setCurrentIndex(1),
+        if search_engine == "https://google.com":
+            self.search_engine.setCurrentIndex(0)
+        elif search_engine == "https://duckduckgo.com":
+            self.search_engine.setCurrentIndex(1)
+        elif search_engine == "https://bing.com":
+            self.search_engine.setCurrentIndex(2)
+        elif search_engine == "https://search.brave.com":
+            self.search_engine.setCurrentIndex(3)
+        elif search_engine == "https://startpage.com":
+            self.search_engine.setCurrentIndex(4)
 
         layout.addWidget(self.search_engine)
         
@@ -244,6 +273,11 @@ class AnkaBrowserSettings(QDialog):
         self.tab_color_button.setFixedSize(QSize(450,25))
         self.tab_color_button.clicked.connect(self.open_tab_color_dialog)
         layout.addWidget(self.tab_color_button)
+        
+        self.delete_history_button = QPushButton("Delete History")
+        self.delete_history_button.setFixedSize(QSize(450,25))
+        self.delete_history_button.clicked.connect(self.delete_history)
+        layout.addWidget(self.delete_history_button)
 
         self.note_label = QLabel("Please restart browser for configurate the settings.")
         self.note_label.setStyleSheet("padding-top: 5px;")
@@ -257,21 +291,32 @@ class AnkaBrowserSettings(QDialog):
         self.setLayout(layout)
     def ok(self):
         s_engine = self.search_engine.currentText()
-        if s_engine == "DuckDuckGo":
-            config["Settings"]["search_engine"] = "https://duckduckgo.com"
-        elif s_engine == "Google":
+        if s_engine == "Google":
             config["Settings"]["search_engine"] = "https://google.com"
+        elif s_engine == "DuckDuckGo":
+            config["Settings"]["search_engine"] = "https://duckduckgo.com"
+        elif s_engine == "Bing":
+            config["Settings"]["search_engine"] = "https://bing.com"
+        elif s_engine == "Brave":
+            config["Settings"]["search_engine"] = "https://search.brave.com"
+        elif s_engine == "StartPage":
+            config["Settings"]["search_engine"] = "https://startpage.com"
+        
         with open('config/config.conf', 'w' ) as configfile:
             config.write(configfile)
         self.accept()
         
     def cancel(self):
         self.reject()
-    start_url = config["Settings"]["search_engine"]
+    
     
     def open_tab_color_dialog(self):
         tab_color_dialog = Tab_Color_Dialog()
         tab_color_dialog.exec()
+    
+    def delete_history(self):
+        with open(history, 'w', encoding="utf-8") as file:
+            file.write(" ")
 
 class Tab_Color_Dialog(QColorDialog):
     def __init__(self, parent=None):
