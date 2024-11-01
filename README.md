@@ -21,6 +21,8 @@ Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source 
 - ### History update:
   Your search history is save to /public/browser/history.txt. If you want, you can delete from "Delete History" button from Settings.
  
+- ### PNG buttons:
+  Now, buttons' icons have ``.png`` extension. Not ``.svg``
 
 ## What is the next update?
 ***Next update includes:***

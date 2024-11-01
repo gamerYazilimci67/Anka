@@ -42,6 +42,7 @@ class AnkaBrowser(QMainWindow):
         self.tabs.setTabsClosable(True)
 
         self.tabs.tabCloseRequested.connect(self.close_tab)
+        
         self.setWindowIcon(QIcon("public/img/logo.ico"))
 
         self.add_new_tab(QUrl(search_engine), tab_name)
@@ -56,7 +57,7 @@ class AnkaBrowser(QMainWindow):
 
         self.back_button = QPushButton()
         self.back_button.clicked.connect(self.browser_back)
-        self.back_button.setIcon(QIcon("/public/img/back.svg"))
+        self.back_button.setIcon(QIcon("./public/img/back.png"))
         self.back_button.setFixedSize(QSize(25, 25))
         self.back_button.setIconSize(QSize(25, 25))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
@@ -64,7 +65,7 @@ class AnkaBrowser(QMainWindow):
         
         self.forward_button = QPushButton()
         self.forward_button.clicked.connect(self.browser_forward)
-        self.forward_button.setIcon(QIcon("public/img/forward.svg"))
+        self.forward_button.setIcon(QIcon("public/img/forward.png"))
         self.forward_button.setFixedSize(QSize(25, 25))
         self.forward_button.setIconSize(QSize(25, 25))
         self.forward_button.setStyleSheet("background-color: transparent; border: none;")
@@ -72,7 +73,7 @@ class AnkaBrowser(QMainWindow):
 
         self.new_tab_button = QPushButton()
         self.new_tab_button.clicked.connect(self.add_new_tab_button)
-        self.new_tab_button.setIcon(QIcon("public/img/newtab.svg"))
+        self.new_tab_button.setIcon(QIcon("public/img/newtab.png"))
         self.new_tab_button.setFixedSize(QSize(25, 25))
         self.new_tab_button.setIconSize(QSize(25, 25))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
@@ -80,7 +81,7 @@ class AnkaBrowser(QMainWindow):
         
         self.reload_button = QPushButton()
         self.reload_button.clicked.connect(self.browser_reload)
-        self.reload_button.setIcon(QIcon("public/img/reload.svg"))
+        self.reload_button.setIcon(QIcon("public/img/reload.png"))
         self.reload_button.setFixedSize(QSize(25,25))
         self.reload_button.setIconSize(QSize(25,25))
         self.reload_button.setStyleSheet("background-color: transparent; border: none;")
@@ -89,7 +90,7 @@ class AnkaBrowser(QMainWindow):
 
         self.settings_button = QPushButton()
         self.settings_button.clicked.connect(self.open_settings)
-        self.settings_button.setIcon(QIcon("public/img/settingsbar.svg"))
+        self.settings_button.setIcon(QIcon("public/img/settingsbar.png"))
         self.settings_button.setFixedSize(QSize(25,25))
         self.settings_button.setIconSize(QSize(25,25))
         self.settings_button.setStyleSheet("background-color: transparent; border: none;")
