@@ -24,11 +24,13 @@ Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source 
 - ### PNG buttons:
   Now, buttons' icons have ``.png`` extension. Not ``.svg``
 
+- ### Light&Dark Theme:
+  If you use Linux, and your system theme is light, Anka Browser theme is light or your system theme is dark, Anka Browser theme is dark.
+
 ## What is the next update?
 ***Next update includes:***
 
 - Downloads
-- Dark Theme
 - Will be add
 
 ## Screenshots from Anka Browser:
