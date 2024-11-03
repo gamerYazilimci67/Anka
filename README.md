@@ -1,13 +1,15 @@
 ![Anka](public/img/logo.png)
 # Anka
 
-Anka Browser v1.7.1
+Anka Browser v1.7.3
 
 ## What is Anka Browser?
 
 Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source browser.
 
-## Anka v1.7.1:
+You can download Anka Browser in every Python installed device.
+
+## Anka v1.7.3:
 
 - ### Customize the Tab Colors:
   Now, you can customize tab colors with Color Dialog(QColorDialog).
@@ -33,6 +35,9 @@ Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source 
 - ### Default Tab Color:
   Now, default tab color is #2aa1b3 with HEX.
 
+- ### Layout Update:
+  Now, main layout's margins 0.
+
 ## What is the next update?
 ***Next update includes:***
 
@@ -40,9 +45,9 @@ Anka is a browser developed with PyQt6 and QWebEngine in Python and open-source 
 - Will be add
 
 ## Screenshots from Anka Browser:
-![Screenshot](./.github/docs/img/image.png)
-![Screenshot2](./.github/docs/img/image-1.png)
-![Screenshot3](./.github/docs/img/image-2.png)
+![Screenshot](./.github/docs/img/image1.png)
+![Screenshot2](./.github/docs/img/image2.png)
+![Screenshot3](./.github/docs/img/image3.png)
 
 ## Imported libraries in project:
 

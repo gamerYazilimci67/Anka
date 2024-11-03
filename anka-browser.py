@@ -45,6 +45,7 @@ class AnkaBrowser(QMainWindow):
              height:25px;
              border-radius: 10px;
              padding: 5px;
+
         
         
         }}
@@ -111,6 +112,7 @@ class AnkaBrowser(QMainWindow):
         self.settings_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         top_layout = QHBoxLayout()
+        top_layout.setContentsMargins(0,0,0,0)
         top_layout.addWidget(self.back_button)
         top_layout.addWidget(self.forward_button)
         top_layout.addWidget(self.new_tab_button)
@@ -119,6 +121,7 @@ class AnkaBrowser(QMainWindow):
         top_layout.addWidget(self.settings_button)
 
         main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0,0,0,0)
         main_layout.addLayout(top_layout)  
         main_layout.addWidget(self.tabs)
 
@@ -183,14 +186,18 @@ class AnkaBrowser(QMainWindow):
 
     def load_url(self):
         url = self.url_bar.text()
-        if not url.startswith("http"):
+        if url.startswith("http://") or url.startswith("https://"):
+            url = url
+        else:
             if search_engine == "https://duckduckgo.com":
                 url = search_engine + "/?q=" + url
             else:
                 url = search_engine + "/search?q=" + url
         
-
         
+        self.update_url(url)
+    
+
 
         
            
@@ -351,7 +358,7 @@ class Tab_Color_Dialog(QColorDialog):
         with open('config/config.conf', 'w' ) as configfile:
             config.write(configfile)
      
-
+ 
 
         
 
