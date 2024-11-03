@@ -42,6 +42,8 @@ You can download Anka Browser in every Python installed device.
 ***Next update includes:***
 
 - Downloads
+- Bookmarks
+- Translate(Maybe)
 - Will be add
 
 ## Screenshots from Anka Browser:
