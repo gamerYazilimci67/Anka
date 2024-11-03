@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import *
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtCore import * 
@@ -9,9 +10,22 @@ import configparser
 
 tab_name = "New Tab"
 history = "./public/browser/history.txt"
+config_path = "./config/config.conf"
+
+if not os.path.exists(history):
+    with open(history, 'x') as history_file:
+       pass 
+if not os.path.exists(config_path):
+    with open(config_path, 'w') as cf:
+        cf.write("""[Settings]
+search_engine = https://google.com
+
+[Appearance]
+tab_color = #2aa1b3
+not_selected_tab_color = #22818f""")
 
 config = configparser.ConfigParser()
-config.read('config/config.conf')
+config.read(config_path)
 
 search_engine = config['Settings']['search_engine']
 tab_color = config['Appearance']['tab_color']
