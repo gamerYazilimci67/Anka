@@ -1,3 +1,4 @@
+# Turkish Version
 import sys
 import os
 from PyQt6.QtWidgets import *
@@ -8,7 +9,7 @@ import configparser
 
 
 
-tab_name = "New Tab"
+tab_name = "Yeni Sekme"
 history = "./public/browser/history.txt"
 config_path = "./config/config.conf"
 
@@ -64,7 +65,7 @@ class AnkaBrowser(QMainWindow):
 
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.load_url)
-        self.url_bar.setPlaceholderText("Enter URL or text...")
+        self.url_bar.setPlaceholderText("URL ya da metin girin...")
         self.url_bar.setFont(QFont("Lexend"))
         self.url_bar.setFixedHeight(25)
         self.url_bar.setStyleSheet("white-space: nowrap;")
@@ -217,12 +218,13 @@ class AnkaBrowser(QMainWindow):
     def show_context_menu(self, position):
         context_menu = QMenu(self)
 
-        context_menu.addAction("Copy", self.browser_copy)
-        context_menu.addAction("Paste", self.browser_paste)
-        context_menu.addAction("Save", self.browser_save)
-        context_menu.addAction("Back", self.browser_back)
-        context_menu.addAction("Forward", self.browser_forward)
-        context_menu.addAction("Reload", self.browser_reload)
+        context_menu.addAction("Kopyala", self.browser_copy)
+        context_menu.addAction("Yapıştır", self.browser_paste)
+        context_menu.addAction("Kaydet", self.browser_save)
+        context_menu.addAction("Geri", self.browser_back)
+        context_menu.addAction("İleri", self.browser_forward)
+        context_menu.addAction("Yeniden Yükle", self.browser_reload)
+        
 
         context_menu.exec(self.tabs.currentWidget().mapToGlobal(position))
 
@@ -239,6 +241,8 @@ class AnkaBrowser(QMainWindow):
         text = clipboard.text()
         current_browser = self.tabs.currentWidget()
         current_browser.page().runJavaScript(f"document.execCommand('insertText', false, '{text}');")
+    
+
 
     def browser_save(self):
         current_browser = self.tabs.currentWidget()
@@ -258,13 +262,13 @@ class AnkaBrowser(QMainWindow):
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Anka | Settings")
+        self.setWindowTitle("Anka | Ayarlar")
         self.setFixedSize(QSize(500,225))
         
 
         layout = QVBoxLayout()
  
-        self.search_engine_label = QLabel("Search Engine: ")
+        self.search_engine_label = QLabel("Arama Motoru: ")
         layout.addWidget(self.search_engine_label)
     
         self.search_engine = QComboBox()
@@ -288,24 +292,26 @@ class AnkaBrowserSettings(QDialog):
 
         layout.addWidget(self.search_engine)
         
-        self.tab_color_button_label = QLabel("Select Tab Color: ")
+        self.tab_color_button_label = QLabel("Sekme rengi seçin: ")
         layout.addWidget(self.tab_color_button_label)
 
-        self.tab_color_button = QPushButton("Tab Color")
+        self.tab_color_button = QPushButton("Sekme Rengi")
         self.tab_color_button.setFixedSize(QSize(450,25))
         self.tab_color_button.clicked.connect(self.open_tab_color_dialog)
         layout.addWidget(self.tab_color_button)
         
-        self.delete_history_button = QPushButton("Delete History")
+        self.delete_history_button = QPushButton("Geçmişi Sil")
         self.delete_history_button.setFixedSize(QSize(450,25))
         self.delete_history_button.clicked.connect(self.delete_history)
         layout.addWidget(self.delete_history_button)
 
-        self.note_label = QLabel("Please restart browser for configurate the settings.")
+        self.note_label = QLabel("Ayarları yapılandırmak için lütfen tarayıcıyı yeniden başlatın.")
         self.note_label.setStyleSheet("padding-top: 5px;")
         layout.addWidget(self.note_label)
          
         self.buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+        self.buttons.button(QDialogButtonBox.StandardButton.Cancel).setText("İptal")
+        self.buttons.button(QDialogButtonBox.StandardButton.Ok).setText("Tamam")
         self.buttons.accepted.connect(self.ok)
         self.buttons.rejected.connect(self.cancel)
         layout.addWidget(self.buttons)
@@ -343,7 +349,7 @@ class AnkaBrowserSettings(QDialog):
 class Tab_Color_Dialog(QColorDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Anka | Select Color")
+        self.setWindowTitle("Anka | Renk Seçin")
         self.setFixedSize(QSize(500,159))
 
         tabColor = Tab_Color_Dialog.getColor()     
