@@ -55,7 +55,26 @@ You can download and use Anka Browser in every Python installed device.
 
 - PyQt6
 - sys
+- os
 - configparser
+
+## How I download an execute the code?
+ ### Download and Install Python:
+   If you use Windows, please install the Python from https://python.org/downloads
+
+   Or if you use Linux:
+    
+    - If you use Debian-Ubuntu based systems: ``sudo apt install python``
+    - If you use Arch based systems: ``sudo pacman -S python``
+    - If you use RedHat based systems: ``sudo dnf install python3``
+ ### Install the libraries:
+   We succesfully complete the Python install. Let's download the libraries:
+     
+    pip --upgrade
+    pip install pyqt6 sys os configparser
+ ### End:
+   If you successfully complete them, please read the "How I compile the code?"
+   
 
 ## How I compile the code?
   ### English Version:

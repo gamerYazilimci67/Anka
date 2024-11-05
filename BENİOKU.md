@@ -55,7 +55,25 @@ Anka Browser'ı Python yüklü her cihazda indirip, kullanabilirsin.
 
 - PyQt6
 - sys
+- os
 - configparser
+
+## Kodu nasıl indiririm ve çalıştırım?
+ ### Python'u indirin ve kurun:
+   Eğer Windows kullanıyorsanız lütfen Python'u https://python.org/downloads'dan indirin ve kurun.
+
+   Eğer Linux kullanıyorsanız:
+    
+    - Debian-Ubuntu tabanlı sistemler: ``sudo apt install python``
+    - Arch tabanlı sistemler: ``sudo pacman -S python``
+    - RedHat tabanlı sistemler: ``sudo dnf install python3``
+ ### Kütüphaneleri kurun:
+   Python kurulumunu başarıyla tamamladık. Şimdi hadi gelin kütüphaneleri indirelim:
+     
+    pip --upgrade
+    pip install pyqt6 sys os configparser
+ ### Son:
+   Eğer yukarıdaki adımları başarıyla tamamladıysanız, lütfen "Kodu nasıl derleyebilirim?"'i okuyun.
 
 ## Kodu nasıl derleyebilirim?
   ### İngilizce versiyon:
