@@ -38,14 +38,6 @@ You can download and use Anka Browser in every Python installed device.
 
 ---
 
-## What is the next update?
-***Next update includes:***
-
-- Downloads
-- Bookmarks
-- Translate(Maybe)
-- Will be add
-
 ## Screenshots from Anka Browser:
 ![Screenshot](./.github/docs/img/image1.png)
 ![Screenshot2](./.github/docs/img/image2.png)

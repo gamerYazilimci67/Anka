@@ -38,14 +38,6 @@ Anka Browser'ı Python yüklü her cihazda indirip, kullanabilirsin.
 
 ---
 
-## Sonraki güncelleme ne?
-***Sonraki güncelleme şunları içerir:***
-
-- İndirilenler
-- Yer imleri
-- Çeviri(Belki)
-- Ve daha fazla ekleneceği şuan kesin olarak belli olmayan şeyler
-
 ## Anka Browser'dan ekran görüntüleri:
 ![Screenshot](./.github/docs/img/image1.png)
 ![Screenshot2](./.github/docs/img/image2.png)
