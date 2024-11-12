@@ -2,7 +2,7 @@
 
 # Anka
 
-Anka Browser v1.8
+Anka Browser v1.9 Beta
 
 ## What is Anka Browser?
 
@@ -12,7 +12,11 @@ You can download and use Anka Browser in every Python installed device.
 
 ---
 
-## Anka v1.8:
+## Anka v1.9 Beta:
+
+- ### Bookmarks Beta:
+  Now, bookmars added. But beta version.
+  
 
 - ### Languages:
   Now, Anka Browser is support two language. Türkçe(Turkish) and English. You can find English version from

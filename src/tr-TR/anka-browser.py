@@ -1,4 +1,3 @@
-# Turkish Version
 import sys
 import os
 from PyQt6.QtWidgets import *
@@ -12,6 +11,7 @@ import configparser
 tab_name = "Yeni Sekme"
 history = "./public/browser/history.txt"
 config_path = "./config/config.conf"
+bookmarks = "./public/browser/bookmarks.txt"
 
 if not os.path.exists(history):
     with open(history, 'x') as history_file:
@@ -24,6 +24,9 @@ search_engine = https://google.com
 [Appearance]
 tab_color = #2aa1b3
 not_selected_tab_color = #22818f""")
+if not os.path.exists(bookmarks):
+    with open(bookmarks, 'x') as bf:
+        pass
 
 config = configparser.ConfigParser()
 config.read(config_path)
@@ -74,42 +77,50 @@ class AnkaBrowser(QMainWindow):
         self.back_button = QPushButton()
         self.back_button.clicked.connect(self.browser_back)
         self.back_button.setIcon(QIcon("./public/img/back.png"))
-        self.back_button.setFixedSize(QSize(25, 25))
-        self.back_button.setIconSize(QSize(25, 25))
+        self.back_button.setFixedSize(QSize(20, 20))
+        self.back_button.setIconSize(QSize(20, 20))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
         self.back_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         self.forward_button = QPushButton()
         self.forward_button.clicked.connect(self.browser_forward)
         self.forward_button.setIcon(QIcon("public/img/forward.png"))
-        self.forward_button.setFixedSize(QSize(25, 25))
-        self.forward_button.setIconSize(QSize(25, 25))
+        self.forward_button.setFixedSize(QSize(20, 20))
+        self.forward_button.setIconSize(QSize(20, 20))
         self.forward_button.setStyleSheet("background-color: transparent; border: none;")
         self.forward_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
 
         self.new_tab_button = QPushButton()
         self.new_tab_button.clicked.connect(self.add_new_tab_button)
         self.new_tab_button.setIcon(QIcon("public/img/newtab.png"))
-        self.new_tab_button.setFixedSize(QSize(25, 25))
-        self.new_tab_button.setIconSize(QSize(25, 25))
+        self.new_tab_button.setFixedSize(QSize(20, 20))
+        self.new_tab_button.setIconSize(QSize(20, 20))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
         self.new_tab_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         self.reload_button = QPushButton()
         self.reload_button.clicked.connect(self.browser_reload)
         self.reload_button.setIcon(QIcon("public/img/reload.png"))
-        self.reload_button.setFixedSize(QSize(25,25))
-        self.reload_button.setIconSize(QSize(25,25))
+        self.reload_button.setFixedSize(QSize(20, 20))
+        self.reload_button.setIconSize(QSize(20, 20))
         self.reload_button.setStyleSheet("background-color: transparent; border: none;")
         self.reload_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
-         
 
+        self.bookmark_button = QPushButton() 
+        self.bookmark_button.clicked.connect(self.bookmark)
+        self.bookmark_button.setIcon(QIcon("public/img/bookmark-regular.png"))
+        self.bookmark_button.setFixedSize(QSize(20,20))
+        self.bookmark_button.setIconSize(QSize(20,20))
+        self.bookmark_button.setStyleSheet("background-color: transparent; border: none;")
+        self.bookmark_button.setCursor(Qt.CursorShape.PointingHandCursor)
+
+        
         self.settings_button = QPushButton()
         self.settings_button.clicked.connect(self.open_settings)
         self.settings_button.setIcon(QIcon("public/img/settingsbar.png"))
-        self.settings_button.setFixedSize(QSize(25,25))
-        self.settings_button.setIconSize(QSize(25,25))
-        self.settings_button.setStyleSheet("background-color: transparent; border: none;")
+        self.settings_button.setFixedSize(QSize(20, 20))
+        self.settings_button.setIconSize(QSize(20, 20))
+        self.settings_button.setStyleSheet("background-color: transparent; border: none; margin-right: 8px;")
         self.settings_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
         
         top_layout = QHBoxLayout()
@@ -118,12 +129,16 @@ class AnkaBrowser(QMainWindow):
         top_layout.addWidget(self.forward_button)
         top_layout.addWidget(self.new_tab_button)
         top_layout.addWidget(self.reload_button)
+        top_layout.addWidget(self.bookmark_button)
         top_layout.addWidget(self.url_bar)
         top_layout.addWidget(self.settings_button)
 
+        self.load_bookmarks(top_layout)
+
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0,0,0,0)
-        main_layout.addLayout(top_layout)  
+        main_layout.addLayout(top_layout)
+          
         main_layout.addWidget(self.tabs)
 
         container = QWidget()
@@ -157,7 +172,7 @@ class AnkaBrowser(QMainWindow):
             exit()
         else:
             self.tabs.removeTab(index)
-
+ 
     def update_title(self, browser, title):
         index = self.tabs.indexOf(browser)
         self.tabs.setTabText(index, title if title else tab_name)
@@ -174,7 +189,7 @@ class AnkaBrowser(QMainWindow):
         current_browser.setUrl(QUrl(url))
         with open(history, 'r', encoding="utf-8") as file:
             old_history = file.read()
-            new_history = str(url) + "\n" + old_history
+            new_history = current_browser.url().toString() + "\n" + old_history
         with open(history, 'w', encoding="utf-8") as file:
             file.write(new_history)
 
@@ -196,11 +211,7 @@ class AnkaBrowser(QMainWindow):
                 url = search_engine + "/search?q=" + url
         
         
-        self.update_url(url)
-    
-
-
-        
+        self.update_url(url)        
            
 
     def browser_back(self):
@@ -256,6 +267,29 @@ class AnkaBrowser(QMainWindow):
     def open_settings(self):
         settings = AnkaBrowserSettings(self)
         settings.exec()
+    def bookmark(self):
+      current_browser = self.tabs.currentWidget()
+      current_url = current_browser.url().toString()
+
+      with open(bookmarks, 'r+', encoding="utf-8") as bookmarks_file:
+        bookmarks_content = bookmarks_file.read()
+        if current_url not in bookmarks_content:
+            bookmarks_file.write(current_url + "\n")
+                    
+    def load_bookmarks(self, top_layout):
+        with open(bookmarks, 'r', encoding="utf-8") as bookmarks_file:
+            urls = bookmarks_file.readlines()
+
+            for url in urls:
+                url = url.strip()
+                if url:
+
+                    bookmark_button = QPushButton(url)
+                    bookmark_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+                    bookmark_button.clicked.connect(lambda checked, url=url: self.add_new_tab(QUrl(url), url))
+                    top_layout.addWidget(bookmark_button)   
+                
+
      
 
        
@@ -365,11 +399,6 @@ class Tab_Color_Dialog(QColorDialog):
             config.write(configfile)
      
  
-
-        
-
-
-
 if __name__ == "__main__":
     app = QApplication(sys.argv)      
     anka_browser_window = AnkaBrowser()
