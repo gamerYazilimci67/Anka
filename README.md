@@ -52,6 +52,7 @@ You can download and use Anka Browser in every Python installed device.
 - sys
 - os
 - configparser
+- json
 
 ## How I download an execute the code?
  ### Download and Install Python:
@@ -66,7 +67,7 @@ You can download and use Anka Browser in every Python installed device.
    We succesfully complete the Python install. Let's download the libraries:
      
     pip --upgrade
-    pip install pyqt6 sys os configparser
+    pip install pyqt6 sys os configparser json
  ### End:
    If you successfully complete them, please read the "How I compile the code?"
    
