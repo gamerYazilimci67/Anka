@@ -19,8 +19,7 @@ You can download and use Anka Browser in every Python installed device.
   
 
 - ### Languages:
-  Now, Anka Browser is support two language. Türkçe(Turkish) and English. You can find English version from
-  ``/src/en-En/`` and you can find Türkçe(Turkish) version from ``/src/tr-TR/``
+  Now, Anka Browser is support two language. Türkçe(Turkish) and English. You can change language from settings.
 
 - ### History update:
   Your search history is save to /public/browser/history.txt. If you want delete history, you can delete from "Delete History" button from Settings.
@@ -78,23 +77,9 @@ You can download and use Anka Browser in every Python installed device.
     
   1. ``cd Anka``
 
-  2. ``cd src``
+  2. ``python3 anka-browser.py``
 
-  3. ``cd en-EN``
 
-  4. ``python3 anka-browser.py``
-
-  ### Türkçe Versiyon(Turkish Version):
-  Kaynak kodunu indirin, isterseniz ingilizce kaynak kodu indirmeyebilirsiniz. Kaynak kodunu
-  indirdiğiniz klasöre geçin ve şu kodları terminale yazın:
-
-  1. ``cd Anka``
-
-  2. ``cd src``
-
-  3. ``cd tr-TR``
-
-  4. ``python3 anka-browser.py``
 
 
 ## Warnings:

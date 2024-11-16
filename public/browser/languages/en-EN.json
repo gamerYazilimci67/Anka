@@ -1,0 +1,19 @@
+{
+    "tab-name" : "New Tab",
+    "url_bar_placeholder" : "Enter URL or text...",
+    "right-click-copy" : "Copy",
+    "right-click-paste" : "Paste",
+    "right-click-save" : "Save",
+    "right-click-back" : "Back",
+    "right-click-forward" : "Forward",
+    "right-click-reload" : "Reload",
+    "settings-title" : "Anka | Settings",
+    "settings-search-engine" : "Search Engine",
+    "settings-tab-color-label" : "Select tab color: ",
+    "settings-tab-color-button" : "Tab Color",
+    "settings-history" : "Delete History",
+    "settings-info-msg" : "Please restart the browser for configure the settings.",
+    "settings-button-ok" : "Ok",
+    "settings-button-cancel" : "Cancel",
+    "tab-color-dialog-title" : "Anka | Select Color"   
+}
