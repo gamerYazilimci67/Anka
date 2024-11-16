@@ -145,11 +145,15 @@ class AnkaBrowser(QMainWindow):
         top_layout.addWidget(self.url_bar)
         top_layout.addWidget(self.settings_button)
 
-        self.load_bookmarks(top_layout)
+        bookmarks_layout = QHBoxLayout()
+        bookmarks_layout.setContentsMargins(0,0,0,0)
+
+        self.load_bookmarks(bookmarks_layout)
 
         main_layout = QVBoxLayout()
         main_layout.setContentsMargins(0,0,0,0)
         main_layout.addLayout(top_layout)
+        main_layout.addLayout(bookmarks_layout)
           
         main_layout.addWidget(self.tabs)
 
@@ -297,6 +301,7 @@ class AnkaBrowser(QMainWindow):
                 if url:
 
                     bookmark_button = QPushButton(url)
+                    bookmark_button.setFixedWidth(150)
                     bookmark_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
                     bookmark_button.clicked.connect(lambda checked, url=url: self.add_new_tab(QUrl(url), url))
                     top_layout.addWidget(bookmark_button)   
