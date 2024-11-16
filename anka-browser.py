@@ -32,7 +32,11 @@ search_engine = https://google.com
 
 [Appearance]
 tab_color = #2aa1b3
-not_selected_tab_color = #22818f""")
+not_selected_tab_color = #22818f
+
+[Language]
+language = tr-TR
+""")
 if not os.path.exists(bookmarks):
     with open(bookmarks, 'x') as bf:
         pass
