@@ -14,6 +14,10 @@ config = configparser.ConfigParser()
 config.read(config_path)
 
 language = config["Language"]["language"]
+language_options = {
+    "tr-TR": "Türkçe",
+    "en-US": "English",
+}
 
 with open(f"./public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
     texts = json.load(jsonn)
@@ -330,8 +334,6 @@ class AnkaBrowserSettings(QDialog):
         self.search_engine.addItem("Brave")
         self.search_engine.addItem("Startpage")
         
-        self.language_label = QLabel("Dil / Language")
-        layout.addWidget(self.language_label)
 
         if search_engine == "https://google.com":
             self.search_engine.setCurrentIndex(0)
@@ -346,15 +348,21 @@ class AnkaBrowserSettings(QDialog):
 
         layout.addWidget(self.search_engine)
         
+        self.language_label = QLabel(texts["lang"])
+        layout.addWidget(self.language_label)
+        
         self.language = QComboBox()
         self.language.setFixedSize(450,25)
-        self.language.addItem("tr-TR")
-        self.language.addItem("en-EN")
-      
-        if language == "tr-TR":
-           self.language.setCurrentIndex(0)
-        else:
-            self.language.setCurrentIndex(1)
+        
+        # Her bir dili tek tek eklemek yerine language_options değişkeninden çekiyor.
+
+        for lang_code, lang_name in language_options.items():
+            self.language.addItem(lang_name, lang_code)
+
+        index = self.language.findData(language)
+
+        if index != -1:  # Eğer bulunursa
+            self.language.setCurrentIndex(index)
         
         layout.addWidget(self.language)
 
@@ -396,13 +404,9 @@ class AnkaBrowserSettings(QDialog):
         elif s_engine == "StartPage":
             config["Settings"]["search_engine"] = "https://startpage.com"
 
-        lan = self.language.currentText()
-        match lan:
-           case "tr-TR":
-             config["Language"]["language"] = "tr-TR"
-           case "en-EN":
-             config["Language"]["language"] = "en-EN"
-        
+        # Burada her bir dosya için ayrı ayrı kodu uzatmak yerine, kısaca kodun Data'sına eşitlemesini sağladım. 
+        lan = self.language.currentData()
+        config["Language"]["language"] = lan
         with open('config/config.conf', 'w' ) as configfile:
             config.write(configfile)
         self.accept()
