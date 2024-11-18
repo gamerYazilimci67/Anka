@@ -2,7 +2,7 @@
 
 # Anka
 
-Anka Browser v1.9 Beta
+Anka Browser v1.9 
 
 ## What is Anka Browser?
 

@@ -402,14 +402,14 @@ class AnkaBrowserSettings(QDialog):
         self.language = QComboBox()
         self.language.setFixedSize(450,25)
         
-        # Her bir dili tek tek eklemek yerine language_options değişkeninden çekiyor.
+        
 
         for lang_code, lang_name in language_options.items():
             self.language.addItem(lang_name, lang_code)
 
         index = self.language.findData(language)
 
-        if index != -1:  # Eğer bulunursa
+        if index != -1: 
             self.language.setCurrentIndex(index)
         
         layout.addWidget(self.language)
@@ -452,7 +452,6 @@ class AnkaBrowserSettings(QDialog):
         elif s_engine == "Startpage":
             config["Settings"]["search_engine"] = "https://startpage.com"
 
-        # Burada her bir dosya için ayrı ayrı kodu uzatmak yerine, kısaca Data'sına eşitlemesini sağladım. 
         lan = self.language.currentData()
         config["Language"]["language"] = lan
         with open('config/config.conf', 'w' ) as configfile:
