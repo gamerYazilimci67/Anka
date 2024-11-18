@@ -7,6 +7,7 @@
     "right-click-back" : "Geri",
     "right-click-forward" : "İleri",
     "right-click-reload" : "Yeniden Yükle",
+    "settings": "Ayarlar",
     "settings-title" : "Anka | Ayarlar",
     "settings-search-engine" : "Arama Motoru: ",
     "settings-tab-color-label" : "Sekme rengi seçin: ",
@@ -15,6 +16,8 @@
     "settings-info-msg" : "Değişikliklerin etkili olması için lütfen tarayıcıyı yeniden başlatın.",
     "settings-button-ok" : "Tamam",
     "settings-button-cancel" : "İptal",
+    "close": "Kapat",
+    "history": "Geçmiş",
     "tab-color-dialog-title" : "Anka | Renk Seçin",
     "lang": "Dil: "
 }
