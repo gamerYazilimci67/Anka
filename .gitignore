@@ -1,2 +1,5 @@
 public/browser/*.txt
+anka-browser.spec
 venv
+dist
+build
