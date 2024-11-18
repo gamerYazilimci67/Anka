@@ -8,12 +8,13 @@
     "right-click-forward" : "Forward",
     "right-click-reload" : "Reload",
     "settings-title" : "Anka | Settings",
-    "settings-search-engine" : "Search Engine",
+    "settings-search-engine" : "Search Engine: ",
     "settings-tab-color-label" : "Select tab color: ",
     "settings-tab-color-button" : "Tab Color",
     "settings-history" : "Delete History",
-    "settings-info-msg" : "Please restart the browser for configure the settings.",
+    "settings-info-msg" : "Please restart the browser for the changes to take effect.",
     "settings-button-ok" : "Ok",
     "settings-button-cancel" : "Cancel",
-    "tab-color-dialog-title" : "Anka | Select Color"   
+    "tab-color-dialog-title" : "Anka | Select Color",
+    "lang": "Language: "
 }
