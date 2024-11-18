@@ -12,8 +12,9 @@
     "settings-tab-color-label" : "Sekme rengi seçin: ",
     "settings-tab-color-button" : "Sekme Rengi",
     "settings-history" : "Geçmişi Sil",
-    "settings-info-msg" : "Ayarları yapılandırmak için lütfen tarayıcıyı yeniden başlatın.",
+    "settings-info-msg" : "Değişikliklerin etkili olması için lütfen tarayıcıyı yeniden başlatın.",
     "settings-button-ok" : "Tamam",
     "settings-button-cancel" : "İptal",
-    "tab-color-dialog-title" : "Anka | Renk Seçin"   
+    "tab-color-dialog-title" : "Anka | Renk Seçin",
+    "lang": "Dil: "
 }
