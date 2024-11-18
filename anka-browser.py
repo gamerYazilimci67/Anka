@@ -6,7 +6,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 import configparser
 import json
-
+import re
 
 
 config_path = "./config/config.conf"
@@ -57,6 +57,7 @@ class AnkaBrowser(QMainWindow):
         
            
         self.tabs = QTabWidget()
+        self.max_tab_text_length = 18
         self.tabs.setStyleSheet(f"""            
         QTabBar::tab{{
              background: {notselected_tab_color};
@@ -132,12 +133,12 @@ class AnkaBrowser(QMainWindow):
 
         
         self.settings_button = QPushButton()
-        self.settings_button.clicked.connect(self.open_settings)
         self.settings_button.setIcon(QIcon("public/img/settingsbar.png"))
         self.settings_button.setFixedSize(QSize(20, 20))
         self.settings_button.setIconSize(QSize(20, 20))
         self.settings_button.setStyleSheet("background-color: transparent; border: none; margin-right: 8px;")
         self.settings_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_button.clicked.connect(self.show_settings_menu)
         
         top_layout = QHBoxLayout()
         top_layout.setContentsMargins(0,0,0,0)
@@ -172,11 +173,49 @@ class AnkaBrowser(QMainWindow):
 
         self.tabs.currentChanged.connect(self.update_url_from_tab)
 
-        
+    def show_settings_menu(self):
+        menu = QMenu(self)
+        history_action = QAction(texts['history'], self)
+        history_action.triggered.connect(self.show_history)
+        menu.addAction(history_action)
+
+        settings_action = QAction(texts['settings'], self)
+        settings_action.triggered.connect(self.open_settings)
+        menu.addAction(settings_action)
+
+        button_position = self.settings_button.mapToGlobal(QPoint(0, self.settings_button.height()))
+        menu.exec(button_position)
+
+    def show_history(self):
+        history_dialog = QDialog(self)
+        history_dialog.setWindowTitle("History")
+        history_dialog.setFixedSize(600, 400)
+
+        layout = QVBoxLayout(history_dialog)
+
+        history_list = QListWidget()
+        layout.addWidget(history_list)
+
+        # Load history from file
+        if os.path.exists(history):
+            with open(history, 'r', encoding="utf-8") as file:
+                lines = file.readlines()
+                for line in lines:
+                    line = line.strip()
+                    if line:
+                        history_list.addItem(line)
+
+        close_button = QPushButton(texts['close'])
+        close_button.clicked.connect(history_dialog.close)
+        layout.addWidget(close_button)
+
+        history_dialog.exec()
+
+
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()
         new_browser.setUrl(QUrl(search_engine))
-        self.tabs.addTab(new_browser, label)
+        self.tabs.addTab(new_browser, self.truncate_tab_text(label))
         self.tabs.setCurrentWidget(new_browser)
         
         self.close_tab_button = QPushButton()
@@ -187,6 +226,7 @@ class AnkaBrowser(QMainWindow):
         new_browser.urlChanged.connect(lambda q: self.update_url(q))
         new_browser.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         new_browser.customContextMenuRequested.connect(self.show_context_menu)
+
     def close_tab(self, index):
         if self.tabs.count() == 1:
             exit()
@@ -195,7 +235,13 @@ class AnkaBrowser(QMainWindow):
  
     def update_title(self, browser, title):
         index = self.tabs.indexOf(browser)
-        self.tabs.setTabText(index, title if title else tab_name)
+        #self.tabs.setTabText(index, title if title else tab_name)
+        self.tabs.setTabText(index, self.truncate_tab_text(title if title else tab_name))
+
+    def truncate_tab_text(self, text):
+        if len(text) > self.max_tab_text_length:
+            return text[:self.max_tab_text_length] + "..."
+        return text
 
     def add_new_tab_button(self):
         self.add_new_tab(search_engine, tab_name)
@@ -221,9 +267,11 @@ class AnkaBrowser(QMainWindow):
             self.url_bar.setText(current_url.toString())
 
     def load_url(self):
-        url = self.url_bar.text()
-        if url.startswith("http://") or url.startswith("https://"):
-            url = url
+        url = self.url_bar.text().strip()
+
+        if re.match(r"^[^\s]+\.[^\s]+$", url):
+            if not url.startswith("http://") and not url.startswith("https://"):
+                url = "http://" + url
         else:
             if search_engine == "https://duckduckgo.com":
                 url = search_engine + "/?q=" + url
@@ -401,10 +449,10 @@ class AnkaBrowserSettings(QDialog):
             config["Settings"]["search_engine"] = "https://bing.com"
         elif s_engine == "Brave":
             config["Settings"]["search_engine"] = "https://search.brave.com"
-        elif s_engine == "StartPage":
+        elif s_engine == "Startpage":
             config["Settings"]["search_engine"] = "https://startpage.com"
 
-        # Burada her bir dosya için ayrı ayrı kodu uzatmak yerine, kısaca kodun Data'sına eşitlemesini sağladım. 
+        # Burada her bir dosya için ayrı ayrı kodu uzatmak yerine, kısaca Data'sına eşitlemesini sağladım. 
         lan = self.language.currentData()
         config["Language"]["language"] = lan
         with open('config/config.conf', 'w' ) as configfile:
