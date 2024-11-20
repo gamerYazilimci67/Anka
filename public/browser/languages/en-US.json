@@ -7,6 +7,10 @@
     "right-click-back" : "Back",
     "right-click-forward" : "Forward",
     "right-click-reload" : "Reload",
+    "settings": "Settings",
+    "html_file": "HTML File",
+    "webp_file": "WEBP File",
+    "all_files": "All Files",
     "settings-title" : "Anka | Settings",
     "settings-search-engine" : "Search Engine: ",
     "settings-tab-color-label" : "Select tab color: ",
@@ -15,6 +19,8 @@
     "settings-info-msg" : "Please restart the browser for the changes to take effect.",
     "settings-button-ok" : "Ok",
     "settings-button-cancel" : "Cancel",
+    "close": "Close",
+    "history": "History",
     "tab-color-dialog-title" : "Anka | Select Color",
     "lang": "Language: "
 }

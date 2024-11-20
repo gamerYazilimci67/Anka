@@ -6,29 +6,17 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 import configparser
 import json
+import re
 
 
+home = os.path.expanduser('~')
+config_anka = f"{home}/.config/Anka"
 
-config_path = "./config/config.conf"
-config = configparser.ConfigParser()
-config.read(config_path)
+if not os.path.exists(config_anka):
+    os.makedirs(config_anka)
 
-language = config["Language"]["language"]
-language_options = {
-    "tr-TR": "Türkçe",
-    "en-US": "English",
-}
+config_path = f"{config_anka}/config.conf"
 
-with open(f"./public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
-    texts = json.load(jsonn)
-
-tab_name =  texts["tab-name"]
-history = "./public/browser/history.txt"
-bookmarks = "./public/browser/bookmarks.txt"
-
-if not os.path.exists(history):
-    with open(history, 'x') as history_file:
-       pass 
 if not os.path.exists(config_path):
     with open(config_path, 'w') as cf:
         cf.write("""[Settings]
@@ -41,6 +29,28 @@ not_selected_tab_color = #22818f
 [Language]
 language = tr-TR
 """)
+
+
+config = configparser.ConfigParser()
+config.read(config_path)
+
+language = config["Language"]["language"]
+language_options = {
+    "tr-TR": "Türkçe",
+    "en-US": "English",
+}
+
+with open(f"{config_anka}/public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
+    texts = json.load(jsonn)
+
+tab_name =  texts["tab-name"]
+history = f"{config_anka}/public/browser/history.txt"
+bookmarks = f"{config_anka}/public/browser/bookmarks.txt"
+
+if not os.path.exists(history):
+    with open(history, 'x') as history_file:
+       pass 
+
 if not os.path.exists(bookmarks):
     with open(bookmarks, 'x') as bf:
         pass
@@ -57,6 +67,7 @@ class AnkaBrowser(QMainWindow):
         
            
         self.tabs = QTabWidget()
+        self.max_tab_text_length = 18
         self.tabs.setStyleSheet(f"""            
         QTabBar::tab{{
              background: {notselected_tab_color};
@@ -65,8 +76,6 @@ class AnkaBrowser(QMainWindow):
              height:25px;
              border-radius: 10px;
              padding: 5px;
-
-        
         
         }}
         QTabBar::tab::selected{{
@@ -78,7 +87,7 @@ class AnkaBrowser(QMainWindow):
 
         self.tabs.tabCloseRequested.connect(self.close_tab)
         
-        self.setWindowIcon(QIcon("public/img/logo.ico"))
+        self.setWindowIcon(QIcon(f"{config_anka}/public/img/logo.ico"))
 
         self.add_new_tab(QUrl(search_engine), tab_name)
 
@@ -92,7 +101,7 @@ class AnkaBrowser(QMainWindow):
 
         self.back_button = QPushButton()
         self.back_button.clicked.connect(self.browser_back)
-        self.back_button.setIcon(QIcon("./public/img/back.png"))
+        self.back_button.setIcon(QIcon(f"{config_anka}/public/img/back.png"))
         self.back_button.setFixedSize(QSize(20, 20))
         self.back_button.setIconSize(QSize(20, 20))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
@@ -100,7 +109,7 @@ class AnkaBrowser(QMainWindow):
         
         self.forward_button = QPushButton()
         self.forward_button.clicked.connect(self.browser_forward)
-        self.forward_button.setIcon(QIcon("public/img/forward.png"))
+        self.forward_button.setIcon(QIcon(f"{config_anka}/public/img/forward.png"))
         self.forward_button.setFixedSize(QSize(20, 20))
         self.forward_button.setIconSize(QSize(20, 20))
         self.forward_button.setStyleSheet("background-color: transparent; border: none;")
@@ -108,7 +117,7 @@ class AnkaBrowser(QMainWindow):
 
         self.new_tab_button = QPushButton()
         self.new_tab_button.clicked.connect(self.add_new_tab_button)
-        self.new_tab_button.setIcon(QIcon("public/img/newtab.png"))
+        self.new_tab_button.setIcon(QIcon(f"{config_anka}/public/img/newtab.png"))
         self.new_tab_button.setFixedSize(QSize(20, 20))
         self.new_tab_button.setIconSize(QSize(20, 20))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
@@ -116,7 +125,7 @@ class AnkaBrowser(QMainWindow):
         
         self.reload_button = QPushButton()
         self.reload_button.clicked.connect(self.browser_reload)
-        self.reload_button.setIcon(QIcon("public/img/reload.png"))
+        self.reload_button.setIcon(QIcon(f"{config_anka}/public/img/reload.png"))
         self.reload_button.setFixedSize(QSize(20, 20))
         self.reload_button.setIconSize(QSize(20, 20))
         self.reload_button.setStyleSheet("background-color: transparent; border: none;")
@@ -124,7 +133,7 @@ class AnkaBrowser(QMainWindow):
 
         self.bookmark_button = QPushButton() 
         self.bookmark_button.clicked.connect(self.bookmark)
-        self.bookmark_button.setIcon(QIcon("public/img/bookmark-regular.png"))
+        self.bookmark_button.setIcon(QIcon(f"{config_anka}/public/img/bookmark-regular.png"))
         self.bookmark_button.setFixedSize(QSize(20,20))
         self.bookmark_button.setIconSize(QSize(20,20))
         self.bookmark_button.setStyleSheet("background-color: transparent; border: none;")
@@ -132,12 +141,12 @@ class AnkaBrowser(QMainWindow):
 
         
         self.settings_button = QPushButton()
-        self.settings_button.clicked.connect(self.open_settings)
-        self.settings_button.setIcon(QIcon("public/img/settingsbar.png"))
+        self.settings_button.setIcon(QIcon(f"{config_anka}/public/img/settingsbar.png"))
         self.settings_button.setFixedSize(QSize(20, 20))
         self.settings_button.setIconSize(QSize(20, 20))
         self.settings_button.setStyleSheet("background-color: transparent; border: none; margin-right: 8px;")
         self.settings_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
+        self.settings_button.clicked.connect(self.show_settings_menu)
         
         top_layout = QHBoxLayout()
         top_layout.setContentsMargins(0,0,0,0)
@@ -167,16 +176,54 @@ class AnkaBrowser(QMainWindow):
 
         self.setWindowTitle("Anka")
         self.showMaximized()  
-        self.setWindowIcon(QIcon("public/img/logo.ico"))
+        self.setWindowIcon(QIcon(f"{config_anka}/public/img/logo.ico"))
         self.resize(1920, 1080)
 
         self.tabs.currentChanged.connect(self.update_url_from_tab)
 
-        
+    def show_settings_menu(self):
+        menu = QMenu(self)
+        history_action = QAction(texts['history'], self)
+        history_action.triggered.connect(self.show_history)
+        menu.addAction(history_action)
+
+        settings_action = QAction(texts['settings'], self)
+        settings_action.triggered.connect(self.open_settings)
+        menu.addAction(settings_action)
+
+        button_position = self.settings_button.mapToGlobal(QPoint(0, self.settings_button.height()))
+        menu.exec(button_position)
+
+    def show_history(self):
+        history_dialog = QDialog(self)
+        history_dialog.setWindowTitle("History")
+        history_dialog.setFixedSize(600, 400)
+
+        layout = QVBoxLayout(history_dialog)
+
+        history_list = QListWidget()
+        layout.addWidget(history_list)
+
+        # Load history from file
+        if os.path.exists(history):
+            with open(history, 'r', encoding="utf-8") as file:
+                lines = file.readlines()
+                for line in lines:
+                    line = line.strip()
+                    if line:
+                        history_list.addItem(line)
+
+        close_button = QPushButton(texts['close'])
+        close_button.clicked.connect(history_dialog.close)
+        layout.addWidget(close_button)
+
+        history_dialog.exec()
+
+
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()
         new_browser.setUrl(QUrl(search_engine))
-        self.tabs.addTab(new_browser, label)
+        self.tabs.addTab(new_browser, self.truncate_tab_text(label))
         self.tabs.setCurrentWidget(new_browser)
         
         self.close_tab_button = QPushButton()
@@ -187,6 +234,7 @@ class AnkaBrowser(QMainWindow):
         new_browser.urlChanged.connect(lambda q: self.update_url(q))
         new_browser.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         new_browser.customContextMenuRequested.connect(self.show_context_menu)
+
     def close_tab(self, index):
         if self.tabs.count() == 1:
             exit()
@@ -195,7 +243,13 @@ class AnkaBrowser(QMainWindow):
  
     def update_title(self, browser, title):
         index = self.tabs.indexOf(browser)
-        self.tabs.setTabText(index, title if title else tab_name)
+        #self.tabs.setTabText(index, title if title else tab_name)
+        self.tabs.setTabText(index, self.truncate_tab_text(title if title else tab_name))
+
+    def truncate_tab_text(self, text):
+        if len(text) > self.max_tab_text_length:
+            return text[:self.max_tab_text_length] + "..."
+        return text
 
     def add_new_tab_button(self):
         self.add_new_tab(search_engine, tab_name)
@@ -221,9 +275,11 @@ class AnkaBrowser(QMainWindow):
             self.url_bar.setText(current_url.toString())
 
     def load_url(self):
-        url = self.url_bar.text()
-        if url.startswith("http://") or url.startswith("https://"):
-            url = url
+        url = self.url_bar.text().strip()
+
+        if re.match(r"^[^\s]+\.[^\s]+$", url):
+            if not url.startswith("http://") and not url.startswith("https://"):
+                url = "http://" + url
         else:
             if search_engine == "https://duckduckgo.com":
                 url = search_engine + "/?q=" + url
@@ -280,7 +336,7 @@ class AnkaBrowser(QMainWindow):
         current_browser.page().toHtml(self.save_html)
 
     def save_html(self, html):
-        file_name, _ = QFileDialog.getSaveFileName(self, "Kaydet", "", "HTML Dosyası (*.html);;WEBP Dosyası(*.webp);;Tüm Dosyalar (*)")
+        file_name, _ = QFileDialog.getSaveFileName(self, texts['right-click-save'], "", f"{texts['html_file']} (*.html);;{texts['webp_file']}(*.webp);;{texts['all_files']} (*)")
         if file_name:
             with open(file_name, 'w', encoding='utf-8') as file:
                 file.write(html)
@@ -310,9 +366,6 @@ class AnkaBrowser(QMainWindow):
                     bookmark_button.clicked.connect(lambda checked, url=url: self.add_new_tab(QUrl(url), url))
                     top_layout.addWidget(bookmark_button)   
                 
-
-     
-
        
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
@@ -401,13 +454,12 @@ class AnkaBrowserSettings(QDialog):
             config["Settings"]["search_engine"] = "https://bing.com"
         elif s_engine == "Brave":
             config["Settings"]["search_engine"] = "https://search.brave.com"
-        elif s_engine == "StartPage":
+        elif s_engine == "Startpage":
             config["Settings"]["search_engine"] = "https://startpage.com"
 
-        
         lan = self.language.currentData()
         config["Language"]["language"] = lan
-        with open('config/config.conf', 'w' ) as configfile:
+        with open(config_path, 'w' ) as configfile:
             config.write(configfile)
         self.accept()
         
@@ -438,7 +490,7 @@ class Tab_Color_Dialog(QColorDialog):
         config["Appearance"]["tab_color"] = str(tabColor)
         config["Appearance"]["not_selected_tab_color"] = str(not_selected_tab_color)
 
-        with open('config/config.conf', 'w' ) as configfile:
+        with open(config_path, 'w' ) as configfile:
             config.write(configfile)
      
  
