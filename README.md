@@ -2,7 +2,7 @@
 
 # Anka
 
-Anka Browser v1.9 
+Anka Browser v1.9.5
 
 ## What is Anka Browser?
 
@@ -12,12 +12,13 @@ You can download and use Anka Browser in every Python installed device.
 
 ---
 
-## Anka v1.9 Beta:
+## Anka v1.9.5:
 
-- ### Bookmarks Beta:
-  Now, bookmars added. But beta version.
+- ### Better Project Struct
+
+- ### Bookmarks:
+  Now, bookmars added. 
   
-
 - ### Languages:
   Now, Anka Browser is support two language. Türkçe(Turkish) and English. You can change language from settings.
 
@@ -45,14 +46,6 @@ You can download and use Anka Browser in every Python installed device.
 ![Screenshot](./.github/docs/img/image1.png)
 ![Screenshot2](./.github/docs/img/image2.png)
 ![Screenshot3](./.github/docs/img/image3.png)
-
-## Imported Python libraries in project:
-
-- PyQt6
-- sys
-- os
-- configparser
-- json
 
 ## How I download Anka Browser?
   - Download latest version from Releases.

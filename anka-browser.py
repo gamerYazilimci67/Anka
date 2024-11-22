@@ -7,7 +7,10 @@ from PyQt6.QtGui import *
 import configparser
 import json
 import re
+import requests
 
+tr_json_url = "https://raw.githubusercontent.com/gamerYazilimci45/Anka/main/public/browser/languages/tr-TR.json"
+en_json_url = "https://raw.githubusercontent.com/gamerYazilimci45/Anka/main/public/browser/languages/en-US.json"
 
 home = os.path.expanduser('~')
 config_anka = f"{home}/.config/Anka"
@@ -16,6 +19,19 @@ if not os.path.exists(config_anka):
     os.makedirs(config_anka)
 
 config_path = f"{config_anka}/config.conf"
+browser_path = f"{config_anka}/public/browser"
+
+
+if not os.path.exists(browser_path):
+    os.makedirs(browser_path)
+
+
+languages_path = f"{browser_path}/languages"
+if not os.path.exists(languages_path):
+    os.makedirs(languages_path)
+
+tr_json = f"{languages_path}/tr-TR.json"
+en_json = f"{languages_path}/en-EN.json"
 
 if not os.path.exists(config_path):
     with open(config_path, 'w') as cf:
@@ -30,6 +46,19 @@ not_selected_tab_color = #22818f
 language = tr-TR
 """)
 
+if not os.path.exists(tr_json):
+    response = requests.get(tr_json_url)
+    response.raise_for_status()
+    
+    with open(tr_json, 'x', encoding="utf-8") as jsonn:
+        json.dump(response.json(), jsonn, ensure_ascii=False, indent=4)
+
+if not os.path.exists(en_json):
+    response = requests.get(en_json_url)
+    response.raise_for_status()
+    
+    with open(en_json, 'x', encoding="utf-8") as jsonn:
+        json.dump(response.json(), jsonn, ensure_ascii=False, indent=4)
 
 config = configparser.ConfigParser()
 config.read(config_path)
