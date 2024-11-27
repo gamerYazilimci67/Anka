@@ -51,11 +51,7 @@ You can download and use Anka Browser in every Python installed device.
   - Download latest version from Releases.
   - And extract it.
   - Open the folder
-  - Run the `anka-browser,
- 
-
-
-
+  - Run the `anka-browser`
 
 ## Warnings:
 > This project is using "GNU GENERAL PUBLIC LICENSE"!
