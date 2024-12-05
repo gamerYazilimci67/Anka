@@ -1,4 +1,5 @@
 {
+    "version" : "v1.1",
     "tab-name" : "New Tab",
     "url_bar_placeholder" : "Enter URL or text...",
     "right-click-copy" : "Copy",
@@ -10,6 +11,8 @@
     "settings": "Settings",
     "html_file": "HTML File",
     "webp_file": "WEBP File",
+    "pdf_file": "PDF File",
+    "docx_file": "DOCX File", 
     "all_files": "All Files",
     "settings-title" : "Anka | Settings",
     "settings-search-engine" : "Search Engine: ",
@@ -21,6 +24,7 @@
     "settings-button-cancel" : "Cancel",
     "close": "Close",
     "history": "History",
+    "open_file": "Open File",
     "tab-color-dialog-title" : "Anka | Select Color",
     "lang": "Language: "
 }
