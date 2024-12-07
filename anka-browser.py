@@ -60,6 +60,7 @@ if not os.path.exists(en_json):
     with open(en_json, 'x', encoding="utf-8") as jsonn:
         json.dump(response.json(), jsonn, ensure_ascii=False, indent=4)
 
+
 config = configparser.ConfigParser()
 config.read(config_path)
 
@@ -69,7 +70,7 @@ language_options = {
     "en-US": "English",
 }
 
-with open(f"{config_anka}/public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
+with open(f"public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
     texts = json.load(jsonn)
 
 tab_name =  texts["tab-name"]
@@ -109,8 +110,12 @@ class AnkaBrowser(QMainWindow):
         }}
         QTabBar::tab::selected{{
             background: {tab_color};
-        }}
+        }} 
+
 """)
+
+    
+
         self.setCentralWidget(self.tabs)
         self.tabs.setTabsClosable(True)
 
@@ -119,6 +124,11 @@ class AnkaBrowser(QMainWindow):
         self.setWindowIcon(QIcon(f"{config_anka}/public/img/logo.ico"))
 
         self.add_new_tab(QUrl(search_engine), tab_name)
+        
+        current_browser = self.tabs.currentWidget()
+        current_browser.settings().setAttribute(current_browser.settings().WebAttribute.PluginsEnabled, True)
+        current_browser.settings().setAttribute(current_browser.settings().WebAttribute.PdfViewerEnabled, True)
+        
 
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.load_url)
@@ -220,6 +230,10 @@ class AnkaBrowser(QMainWindow):
         settings_action.triggered.connect(self.open_settings)
         menu.addAction(settings_action)
 
+        file_action = QAction(texts['open_file'], self)
+        file_action.triggered.connect(self.open_file)
+        menu.addAction(file_action)
+
         button_position = self.settings_button.mapToGlobal(QPoint(0, self.settings_button.height()))
         menu.exec(button_position)
 
@@ -247,7 +261,20 @@ class AnkaBrowser(QMainWindow):
         layout.addWidget(close_button)
 
         history_dialog.exec()
+    
+    def open_file(self):
+        file_path, _ = QFileDialog.getOpenFileName(
+    self,
+    home,
+    texts['open_file'],
+    "",
+    f"{texts['pdf_file']} (*.pdf);; {texts['png_file']};; {texts['html_file']} (*.html);; {texts['webp_file']} (*.webp);; {texts['all_files']} (*)"
+)
 
+        if file_path:
+            file_url = QUrl.fromLocalFile(file_path)
+            current_browser = self.tabs.currentWidget()
+            current_browser.load(file_url)
 
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()

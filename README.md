@@ -2,7 +2,7 @@
 
 # Anka
 
-Anka Browser v1.9.5
+Anka Browser v1.9.7
 
 ## What is Anka Browser?
 
@@ -12,33 +12,17 @@ You can download and use Anka Browser in every Python installed device.
 
 ---
 
-## Anka v1.9.5:
+## Anka v1.9.7:
 
 - ### Better Project Struct
 
-- ### Bookmarks:
-  Now, bookmars added. 
-  
-- ### Languages:
-  Now, Anka Browser is support two language. Türkçe(Turkish) and English. You can change language from settings.
+- ### Language Packages Updated
 
-- ### History update:
-  Your search history is save to /public/browser/history.txt. If you want delete history, you can delete from "Delete History" button from Settings.
- 
-- ### PNG buttons:
-  Now, buttons' icons have ``.png`` extension. Not ``.svg``
+- ### Open Your Files
+  Now, you can open your files with `Open File` option in menu.
 
-- ### Light&Dark Theme:
-  If you use Linux, and your system theme is light, Anka Browser theme is light or your system theme is dark, Anka Browser theme is dark.
-
-- ### Browser Files Control:
-  If ``config/config.conf`` file or ``public/browser/history.txt`` file is deleted or not finded, Anka Browser create them with default variables.
-
-- ### Default Tab Color:
-  Now, default tab color is #2aa1b3 with HEX.
-
-- ### Layout Update:
-  Now, main layout's margins 0.
+- ### View Your PDF's!
+  Now, you can view your `.pdf`'s with "Open File" button in menu. And you can download them.
 
 ---
 
