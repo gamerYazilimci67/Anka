@@ -70,7 +70,7 @@ language_options = {
     "en-US": "English",
 }
 
-with open(f"{config_anka}/public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
+with open(f"/public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
     texts = json.load(jsonn)
 
 tab_name =  texts["tab-name"]
