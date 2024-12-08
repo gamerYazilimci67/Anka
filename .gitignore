@@ -3,3 +3,4 @@ anka-browser.spec
 venv
 dist
 build
+get_resource_path_func.txt
