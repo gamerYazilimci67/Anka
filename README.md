@@ -38,5 +38,5 @@ You can download and use Anka Browser in every Python installed device.
   - Run the `anka-browser`
  
 
-## Warnings:
+>[!WARNING]
 > This project is using "GNU GENERAL PUBLIC LICENSE"!
