@@ -12,21 +12,33 @@ You can download and use Anka Browser in every Python installed device.
 
 ---
 
-## Anka v1.9.7:
+## Anka v1.9.8:
 
-- ### Better Project Struct
+- ### Download Bug is Fixed!
 
-- ### Language Packages Updated
+- ### Downloads is added!
+Now, if you download anything, it will show Downloads in menubar. And you can see them.
 
-- ### Open Your Files
-  Now, you can open your files with `Open File` option in menu.
+- ### Delete Your Bookmarks!
+You can delete your bookmarks from settings. Go settings and click "Delete Bookmarks".
 
-- ### View Your PDF's!
-  Now, you can view your `.pdf`'s with "Open File" button in menu. And you can download them.
+- ### Fullscreen Support!
+Now you can change your browser to fullscreen with "F11" key. And you can rechange your browser to normal with "F11" key.
+
+- ### Bookmarks Bug is Fixed!
+In old versions, if you click your bookmarks, it was direct your search engine. This bug is fixed!
+
+- ### New File Types for Your Downloads!
+Now, you can download your files with this types:
+- `.html`
+- `.png`
+- `.webp`
+- `.pdf`
+- `.*`(All file types)
 
 ---
 
-## Screenshots from Anka Browser(*This screenshots is from old versions*):
+## Screenshots from Anka Browser v1.9.8:
 ![Screenshot](./.github/docs/img/image1.png)
 ![Screenshot2](./.github/docs/img/image2.png)
 ![Screenshot3](./.github/docs/img/image3.png)
@@ -38,5 +50,5 @@ You can download and use Anka Browser in every Python installed device.
   - Run the `anka-browser`
  
 
-## Warnings:
+> [!WARNING]
 > This project is using "GNU GENERAL PUBLIC LICENSE"!
