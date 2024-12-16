@@ -70,12 +70,13 @@ language_options = {
     "en-US": "English",
 }
 
-with open(f"/public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
+with open(f"./public/browser/languages/{language}.json", "r", encoding="UTF-8") as jsonn:
     texts = json.load(jsonn)
 
 tab_name =  texts["tab-name"]
 history = f"{config_anka}/public/browser/history.txt"
 bookmarks = f"{config_anka}/public/browser/bookmarks.txt"
+downloads = f"{config_anka}/public/browser/downloads.txt"
 
 if not os.path.exists(history):
     with open(history, 'x') as history_file:
@@ -85,6 +86,9 @@ if not os.path.exists(bookmarks):
     with open(bookmarks, 'x') as bf:
         pass
 
+if not os.path.exists(downloads):
+    with open(downloads, 'x') as df:
+        pass
 
 
 search_engine = config['Settings']['search_engine']
@@ -121,26 +125,29 @@ class AnkaBrowser(QMainWindow):
 
         self.tabs.tabCloseRequested.connect(self.close_tab)
         
-        self.setWindowIcon(QIcon(f"{config_anka}/public/img/logo.ico"))
+        self.setWindowIcon(QIcon(".public/img/logo.ico"))
 
         self.add_new_tab(QUrl(search_engine), tab_name)
         
         current_browser = self.tabs.currentWidget()
         current_browser.settings().setAttribute(current_browser.settings().WebAttribute.PluginsEnabled, True)
         current_browser.settings().setAttribute(current_browser.settings().WebAttribute.PdfViewerEnabled, True)
-        
+        profile = self.tabs.currentWidget().page().profile()
+        profile.downloadRequested.connect(self.handle_download)
+
+        self.is_fullscreen = False
 
         self.url_bar = QLineEdit()
         self.url_bar.returnPressed.connect(self.load_url)
         self.url_bar.setPlaceholderText(texts["url_bar_placeholder"])
         self.url_bar.setFont(QFont("Lexend"))
         self.url_bar.setFixedHeight(25)
-        self.url_bar.setStyleSheet("white-space: nowrap;")
+        self.url_bar.setStyleSheet("white-space: nowrap; border: 1.5px solid black; border-radius: 0.6px")
        
 
         self.back_button = QPushButton()
         self.back_button.clicked.connect(self.browser_back)
-        self.back_button.setIcon(QIcon(f"{config_anka}/public/img/back.png"))
+        self.back_button.setIcon(QIcon("./public/img/back.png"))
         self.back_button.setFixedSize(QSize(20, 20))
         self.back_button.setIconSize(QSize(20, 20))
         self.back_button.setStyleSheet("background-color: transparent; border: none;")
@@ -148,7 +155,7 @@ class AnkaBrowser(QMainWindow):
         
         self.forward_button = QPushButton()
         self.forward_button.clicked.connect(self.browser_forward)
-        self.forward_button.setIcon(QIcon(f"{config_anka}/public/img/forward.png"))
+        self.forward_button.setIcon(QIcon("./public/img/forward.png"))
         self.forward_button.setFixedSize(QSize(20, 20))
         self.forward_button.setIconSize(QSize(20, 20))
         self.forward_button.setStyleSheet("background-color: transparent; border: none;")
@@ -156,7 +163,7 @@ class AnkaBrowser(QMainWindow):
 
         self.new_tab_button = QPushButton()
         self.new_tab_button.clicked.connect(self.add_new_tab_button)
-        self.new_tab_button.setIcon(QIcon(f"{config_anka}/public/img/newtab.png"))
+        self.new_tab_button.setIcon(QIcon("./public/img/newtab.png"))
         self.new_tab_button.setFixedSize(QSize(20, 20))
         self.new_tab_button.setIconSize(QSize(20, 20))
         self.new_tab_button.setStyleSheet("background-color: transparent; border: none;")
@@ -164,7 +171,7 @@ class AnkaBrowser(QMainWindow):
         
         self.reload_button = QPushButton()
         self.reload_button.clicked.connect(self.browser_reload)
-        self.reload_button.setIcon(QIcon(f"{config_anka}/public/img/reload.png"))
+        self.reload_button.setIcon(QIcon("./public/img/reload.png"))
         self.reload_button.setFixedSize(QSize(20, 20))
         self.reload_button.setIconSize(QSize(20, 20))
         self.reload_button.setStyleSheet("background-color: transparent; border: none;")
@@ -172,7 +179,7 @@ class AnkaBrowser(QMainWindow):
 
         self.bookmark_button = QPushButton() 
         self.bookmark_button.clicked.connect(self.bookmark)
-        self.bookmark_button.setIcon(QIcon(f"{config_anka}/public/img/bookmark-regular.png"))
+        self.bookmark_button.setIcon(QIcon("./public/img/bookmark-regular.png"))
         self.bookmark_button.setFixedSize(QSize(20,20))
         self.bookmark_button.setIconSize(QSize(20,20))
         self.bookmark_button.setStyleSheet("background-color: transparent; border: none;")
@@ -180,7 +187,7 @@ class AnkaBrowser(QMainWindow):
 
         
         self.settings_button = QPushButton()
-        self.settings_button.setIcon(QIcon(f"{config_anka}/public/img/settingsbar.png"))
+        self.settings_button.setIcon(QIcon("./public/img/settingsbar.png"))
         self.settings_button.setFixedSize(QSize(20, 20))
         self.settings_button.setIconSize(QSize(20, 20))
         self.settings_button.setStyleSheet("background-color: transparent; border: none; margin-right: 8px;")
@@ -215,20 +222,25 @@ class AnkaBrowser(QMainWindow):
 
         self.setWindowTitle("Anka")
         self.showMaximized()  
-        self.setWindowIcon(QIcon(f"{config_anka}/public/img/logo.ico"))
+        self.setWindowIcon(QIcon("./public/img/logo.ico"))
         self.resize(1920, 1080)
 
         self.tabs.currentChanged.connect(self.update_url_from_tab)
 
     def show_settings_menu(self):
         menu = QMenu(self)
-        history_action = QAction(texts['history'], self)
-        history_action.triggered.connect(self.show_history)
-        menu.addAction(history_action)
 
         settings_action = QAction(texts['settings'], self)
         settings_action.triggered.connect(self.open_settings)
         menu.addAction(settings_action)
+        
+        downloads_action = QAction(texts['downloads'], self)
+        downloads_action.triggered.connect(self.show_downloads)
+        menu.addAction(downloads_action)
+
+        history_action = QAction(texts['history'], self)
+        history_action.triggered.connect(self.show_history)
+        menu.addAction(history_action)
 
         file_action = QAction(texts['open_file'], self)
         file_action.triggered.connect(self.open_file)
@@ -236,6 +248,31 @@ class AnkaBrowser(QMainWindow):
 
         button_position = self.settings_button.mapToGlobal(QPoint(0, self.settings_button.height()))
         menu.exec(button_position)
+    def show_downloads(self):
+        downloads_dialog = QDialog(self)
+        downloads_dialog.setWindowTitle("Downloads")
+        downloads_dialog.setFixedSize(600, 400)
+
+        layout = QVBoxLayout(downloads_dialog)
+
+        downloads_list = QListWidget()
+        layout.addWidget(downloads_list)
+
+        # Load downloads from file
+        if os.path.exists(downloads):
+            with open(downloads, 'r', encoding="utf-8") as file:
+                lines = file.readlines()
+                for line in lines:
+                    line = line.strip()
+                    if line:
+                        downloads_list.addItem(line)
+
+        close_button = QPushButton(texts['close'])
+        close_button.clicked.connect(downloads_dialog.close)
+        layout.addWidget(close_button)
+
+        downloads_dialog.exec()
+    
 
     def show_history(self):
         history_dialog = QDialog(self)
@@ -278,7 +315,10 @@ class AnkaBrowser(QMainWindow):
 
     def add_new_tab(self, url, label):
         new_browser = QWebEngineView()
-        new_browser.setUrl(QUrl(search_engine))
+        if url:
+            new_browser.setUrl(QUrl(url))
+        else:
+            new_browser.setUrl(QUrl(search_engine))
         self.tabs.addTab(new_browser, self.truncate_tab_text(label))
         self.tabs.setCurrentWidget(new_browser)
         
@@ -290,13 +330,34 @@ class AnkaBrowser(QMainWindow):
         new_browser.urlChanged.connect(lambda q: self.update_url(q))
         new_browser.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         new_browser.customContextMenuRequested.connect(self.show_context_menu)
+    
+    
+
 
     def close_tab(self, index):
         if self.tabs.count() == 1:
             exit()
         else:
             self.tabs.removeTab(index)
- 
+    def handle_download(self, download_item):
+        
+        save_path, _ = QFileDialog.getSaveFileName(
+            self,
+            texts['right-click-save'],
+            os.path.join(home, download_item.suggestedFileName()),
+            f"{texts['html_file']} (*.html);;{texts['png_file']};;{texts['webp_file']};;{texts['pdf_file']};;{texts['all_files']}"
+        )
+
+        if save_path:
+            download_item.setDownloadDirectory(save_path.rsplit('/', 1)[0])
+            download_item.setDownloadFileName(save_path.rsplit('/', 1)[-1])
+            download_item.accept()
+
+            with open(downloads, 'r+', encoding="utf-8") as downloads_file:
+                downloads_file.write(save_path + download_item.downloadFileName() + "\n")
+
+        else:
+            download_item.cancel()
     def update_title(self, browser, title):
         index = self.tabs.indexOf(browser)
         #self.tabs.setTabText(index, title if title else tab_name)
@@ -392,7 +453,7 @@ class AnkaBrowser(QMainWindow):
         current_browser.page().toHtml(self.save_html)
 
     def save_html(self, html):
-        file_name, _ = QFileDialog.getSaveFileName(self, texts['right-click-save'], "", f"{texts['html_file']} (*.html);;{texts['webp_file']}(*.webp);;{texts['all_files']} (*)")
+        file_name, _ = QFileDialog.getSaveFileName(self, texts['right-click-save'], "", f"{texts['html_file']} (*.html);;{texts['png_file']};;{texts['webp_file']};;{texts['pdf_file']};;{texts['all_files']}")
         if file_name:
             with open(file_name, 'w', encoding='utf-8') as file:
                 file.write(html)
@@ -421,7 +482,14 @@ class AnkaBrowser(QMainWindow):
                     bookmark_button.setCursor(QCursor(Qt.CursorShape.PointingHandCursor))
                     bookmark_button.clicked.connect(lambda checked, url=url: self.add_new_tab(QUrl(url), url))
                     top_layout.addWidget(bookmark_button)   
-                
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key.Key_F11:
+            if self.is_fullscreen:
+                self.showNormal()
+                self.is_fullscreen = False
+            else:
+                self.showFullScreen()
+                self.is_fullscreen = True   
        
 class AnkaBrowserSettings(QDialog):
     def __init__(self, parent=None):
@@ -488,6 +556,11 @@ class AnkaBrowserSettings(QDialog):
         self.delete_history_button.clicked.connect(self.delete_history)
         layout.addWidget(self.delete_history_button)
 
+        self.delete_bookmarks_button = QPushButton(texts["settings-bookmarks"])
+        self.delete_bookmarks_button.setFixedSize(QSize(450,25))
+        self.delete_bookmarks_button.clicked.connect(self.delete_bookmarks)
+        layout.addWidget(self.delete_bookmarks_button)
+
         self.note_label = QLabel(texts["settings-info-msg"])
         self.note_label.setStyleSheet("padding-top: 5px;")
         layout.addWidget(self.note_label)
@@ -529,6 +602,9 @@ class AnkaBrowserSettings(QDialog):
     
     def delete_history(self):
         with open(history, 'w', encoding="utf-8") as file:
+            file.write(" ")
+    def delete_bookmarks(self):
+        with open(bookmarks, 'w', encoding="utf-8") as file:
             file.write(" ")
 
 class Tab_Color_Dialog(QColorDialog):
